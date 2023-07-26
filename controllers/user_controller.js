@@ -36,3 +36,27 @@ module.exports.create = async (req, res) => {
     console.log(err);
   }
 };
+
+// sign in and create a session
+module.exports.createSession = async (req, res) => {
+  try {
+    // find the user
+    const user = await User.findOne({ email: req.body.email });
+    // if user found
+    if (user) {
+      // handle password which doesn't match
+      if (user.password != req.body.password) {
+        return res.redirect("back");
+      } else {
+        // handle session creation
+        res.cookie("user_id", user.id);
+        return res.redirect("/users/profile");
+      }
+    } else {
+      // handle user not found
+      return res.redirect("back");
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
