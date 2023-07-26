@@ -21,11 +21,13 @@ module.exports.signIn = function (req, res) {
 // get the sign up data
 module.exports.create = async (req, res) => {
   try {
+    // check user password is confirm or not
     if (req.body.password != req.body.confirm_password) {
       return res.redirect("back");
     }
+    // find user by email
     const user = await User.findOne({ email: req.body.email });
-
+    //  find user if user is not created then create a new user
     if (!user) {
       const newUser = await User.create(req.body);
       return res.redirect("/users/sign-in");
