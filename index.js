@@ -29,6 +29,21 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(__dirname + "/assets"));
 // mongo store is used to store the session cookie in the db
 
+//session configuration
+const mongoStore = new MongoStore({
+  db: "session",
+  url: "mongodb://127.0.0.1:27017/Codeial",
+});
+app.use(
+  session({
+    secret: "somethingblabla",
+    resave: false,
+    saveUninitialized: false,
+    store: mongoStore,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 }, //cookie valid for 24 hours
+  })
+);
+
 app.use(passport.initialize());
 app.use(passport.session());
 
