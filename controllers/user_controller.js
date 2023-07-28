@@ -128,6 +128,17 @@ module.exports.create = async (req, res) => {
 };
 
 /// sign in and create a session for the user
-module.exports.createSession = function (req, res) {
+module.exports.createSession = async (req, res) => {
   return res.redirect("/");
+};
+
+// sign-out the session
+module.exports.destroySession = async (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+
+    return res.redirect("/");
+  });
 };
