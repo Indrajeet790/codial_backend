@@ -1,4 +1,5 @@
 <h1>Codeial /<%=title%></h1>
+<!-- created code for post sections -->
 <section id="feed-posts">
   <h4>Posts</h4>
   <form action="/users/create/posts" id="new-post-form" method="POST">
@@ -10,4 +11,19 @@
     ></textarea>
     <input type="submit" value="Post" />
   </form>
+  <!-- show user  post into home page -->
+  <div id="posts-list-container">
+    <ul>
+      <% posts.forEach(function(post) { %>
+      <p>
+        <li>
+          <%= post.content %>
+          <br />
+          <%= post.user.name%>
+        </li>
+      </p>
+
+      <% }); %>
+    </ul>
+  </div>
 </section>
