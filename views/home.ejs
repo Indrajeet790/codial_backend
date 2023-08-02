@@ -2,6 +2,7 @@
 <!-- created code for post sections -->
 <section id="feed-posts">
   <h4>Posts</h4>
+  <% if(locals.user){%>
   <form action="/users/create/posts" id="new-post-form" method="POST">
     <textarea
       name="content"
@@ -11,19 +12,21 @@
     ></textarea>
     <input type="submit" value="Post" />
   </form>
+  <%}%>
   <!-- show user  post into home page -->
-  <div id="posts-list-container">
-    <ul>
-      <% posts.forEach(function(post) { %>
-      <p>
-        <li>
-          <%= post.content %>
-          <br />
-          <%= post.user.name%>
-        </li>
-      </p>
-
-      <% }); %>
-    </ul>
+  <ul>
+    <% posts.forEach(function(post) { %>
+    <li>
+      <%= post.content %>
+      <br />
+      <% if (post.user) { %>
+        <%= post.user.name %>
+      <% } else { %>
+        Unknown User
+      <% } %>
+    </li>
+    <% }); %>
+  </ul>
+  
   </div>
 </section>
