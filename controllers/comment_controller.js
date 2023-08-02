@@ -1,10 +1,14 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
 
+// create comment  of a post
+
 module.exports.create = async function (req, res) {
   try {
+    // find post id and  create comment
     const post = await Post.findById(req.body.post);
 
+    // if post is found then user can create a comment on post
     if (post) {
       const comment = await Comment.create({
         content: req.body.content,
