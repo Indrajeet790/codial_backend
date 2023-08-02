@@ -129,7 +129,7 @@ module.exports.create = async (req, res) => {
 
 /// sign in and create a session for the user
 module.exports.createSession = async (req, res) => {
-  return res.redirect("/");
+  return res.redirect("/users/profile");
 };
 
 // sign-out the session
