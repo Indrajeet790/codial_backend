@@ -16,15 +16,27 @@
   <!-- show user  post into home page -->
   <ul>
     <% posts.forEach(function(post) { %>
-    <li>
-      <%= post.content %>
-      <br />
-      <% if (post.user) { %>
-        <%= post.user.name %>
-      <% } else { %>
-        Unknown User
-      <% } %>
-    </li>
+    <P>
+      <li>
+        <%= post.content %>
+        <br />
+        <% if (post.user) { %>
+          <%= post.user.name %>
+        <% } else { %>
+          Unknown User
+        <% } %>
+      </li>
+    </P>
+    <!-- comment form -->
+    <div class="post-comment">
+      <% if(locals.user) {%>
+        <form action="/users/create/comment/" method="POST">
+          <input type="text" name="content" placeholder="Type here to add comment...">
+          <input type="hidden" name="post" value="<%= post._id %>">
+          <input type="submit" value="Add comment">
+        </form>
+        <%}%>
+    </div>
     <% }); %>
   </ul>
   
