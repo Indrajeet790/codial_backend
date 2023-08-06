@@ -32,7 +32,7 @@ app.use(express.static(__dirname + "/assets"));
 //session configuration
 const mongoStore = new MongoStore({
   db: "session",
-  url: "mongodb://127.0.0.1:27017/Codeial",
+  url: "mongodb+srv://codieal:Gupta1998@cluster0.oidggmh.mongodb.net/Codeial",
 });
 app.use(
   session({

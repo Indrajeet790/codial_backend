@@ -3,7 +3,7 @@
 <section id="feed-posts">
   <h4>Posts</h4>
   <% if(locals.user){%>
-  <form action="/users/create/posts" id="new-post-form" method="POST">
+  <form action="/posts/create/posts" id="new-post-form" method="POST">
     <textarea
       name="content"
       cols="30"
@@ -16,7 +16,13 @@
   <!-- show user  post into home page -->
   <ul>
     <% posts.forEach(function(post) { %>
+      <!-- find user and user id and match if match then delete post -->
     <P>
+      <% if (locals.user && locals.user.id === post.user.id) { %>
+        <small>
+            <a href="/posts/destroy/<%= post.id %>">X</a>
+        </small>
+    <% } %>
       <li>
         <%= post.content %>
         <br />
