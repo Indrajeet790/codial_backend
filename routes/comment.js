@@ -4,9 +4,14 @@ const commentController = require("../controllers/comment_controller");
 const passport = require("passport");
 
 router.post(
-  "/create/comment",
+  "/create",
   passport.checkAuthentication,
   commentController.create
+);
+router.get(
+  "/delete/:id",
+  passport.checkAuthentication,
+  commentController.destroy
 );
 
 module.exports = router;
