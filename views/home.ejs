@@ -1,71 +1,23 @@
-<h1>Codeial /<%=title%></h1>
-<!-- created code for post sections -->
+
+<h1>
+  <%= title %>
+</h1>
+
+
 <section id="feed-posts">
   <h4>Posts</h4>
-  <% if(locals.user){%>
-  <form action="/posts/create/posts" id="new-post-form" method="POST">
-    <textarea
-      name="content"
-      cols="30"
-      rows="5"
-      placeholder="Type-here...."
-    ></textarea>
-    <input type="submit" value="Post" />
+  <% if(locals.user){ %>
+  <form action="/posts/create" id="new-post-form" method="POST">
+      <textarea name="content" cols="30" rows="3" placeholder="Type Here..." required></textarea>
+      <input type="submit" value="Post">
   </form>
-  <%}%>
-  <!-- show user  post into home page -->
-  <ul>
-    <% posts.forEach(function(post) { %>
-      <!-- find user and user id and match if match then delete post -->
-    <li>
-    <P>
-      <% if (locals.user && locals.user.id === post.user.id) { %>
-        <small>
-            <a href="/posts/destroy/<%= post.id %>">X</a>
-        </small>
-    <% } %>
-      <li>
-        <%= post.content %>
-        <br />
-        <% if (post.user) { %>
-          <%= post.user.name %>
-        <% } else { %>
-          Unknown User
-        <% } %>
-      </li>
-    </P>
-    <!-- comment form -->
-    <div class="post-comment">
-      <% if(locals.user) {%>
-        <form action="/comments/create/" method="POST">
-          <input type="text" name="content" placeholder="Type here to add comment...">
-          <input type="hidden" name="post" value="<%= post._id %>">
-          <input type="submit" value="Add comment">
-        </form>
-        <%}%>
-        <!-- show comments -->
-        <div class="post-comments-list">
-          <ul id="post-comments-<%= post._id %>">
-          <% for (comment of post.comments){%>
-            <p>
-              <% if (locals.user && locals.user.id === comment.user.id) { %>
-                <small>
-                    <a href="/comments/delete/<%= comment.id %>">X</a>
-                </small>
-            <% } %>
-              <%= comment.content %>
-              <br>
-              <small>
-                <%= comment.user.name%>
-              </small>
-              </p>
-            <%}%>
-          </ul>
-        </div>
-    </div>
-    </li>
-    <% }); %>
-  </ul>
-  
+  <% } %>
+
+  <div id="posts-list-container">
+      <ul>
+          <% for(post of posts){ %>
+            <%- include('_post') -%>
+          <%} %>
+      </ul>
   </div>
 </section>
