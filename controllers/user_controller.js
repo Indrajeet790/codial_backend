@@ -98,6 +98,19 @@ module.exports.profile = async (req, res) => {
   }
 };
 
+// update user profile 
+module.exports.update = async function(req, res) {
+  try {
+    if(req.user.id === req.params.id) {
+      await User.findByIdAndUpdate(req.params.id , req.body);
+      return res.redirect("back")
+    }else {
+      return res.status(401).send("unauthorized");
+    }
+  } catch (error) {
+    return res.status(500).send({error:error});
+  }
+}
 
 // render the sign up page
 module.exports.signUp = (req, res) => {
