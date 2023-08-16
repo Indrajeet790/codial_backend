@@ -155,6 +155,7 @@ module.exports.create = async (req, res) => {
 
 /// sign in and create a session for the user
 module.exports.createSession = async (req, res) => {
+  req.flash('success','logged in successfully')
   return res.redirect("/");
 };
 
@@ -164,7 +165,7 @@ module.exports.destroySession = async (req, res) => {
     if (err) {
       return next(err);
     }
-
+  req.flash('success','you have logged out successfully')
     return res.redirect("/");
   });
 };

@@ -8,10 +8,12 @@ module.exports.create = async (req, res) => {
       content: req.body.content,
       user: req.user._id,
     });
+    req.flash('success','post publish!')
     console.log(createPost);
     return res.redirect("back");
   } catch (err) {
-    console.log(err);
+    req.flash('error',err)
+    return res.status(500).send({error:err.message})
   }
 };
 
@@ -31,13 +33,15 @@ module.exports.destroy = async (req, res) => {
 
       // Delete comments associated with the post
       await Comment.deleteMany({ post: req.params.id });
+      req.flash('success','post and associates are delete')
 
       return res.redirect('back');
     } else {
+      req.flash('error','you can not delete this post')
       return res.status(403).send("You're not authorized to delete this post");
     }
   } catch (err) {
-    console.error(err);
+    req.flash('error','err')
     return res.status(500).send("Internal server error");
   }
 };
