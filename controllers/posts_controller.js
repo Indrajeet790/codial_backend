@@ -8,6 +8,15 @@ module.exports.create = async (req, res) => {
       content: req.body.content,
       user: req.user._id,
     });
+    // xml http request
+    if (req.xhr){
+      return res.status(200).json({
+          data: {
+              post: post
+          },
+          message: "Post created!"
+      });
+  }
     req.flash('success','post publish!')
     console.log(createPost);
     return res.redirect("back");
@@ -33,6 +42,17 @@ module.exports.destroy = async (req, res) => {
 
       // Delete comments associated with the post
       await Comment.deleteMany({ post: req.params.id });
+      
+       // xml http request
+      if (req.xhr){
+        return res.status(200).json({
+            data: {
+                post_id: req.params.id
+            },
+            message: "Post deleted"
+        });
+    }
+
       req.flash('success','post and associates are delete')
 
       return res.redirect('back');
