@@ -79,6 +79,8 @@
 // };
 // *************************************************************************//
 const User = require("../models/user");
+const fs = require("fs");
+const path = require("path");
 
 module.exports.profile = async (req, res) => {
   try {
@@ -98,19 +100,43 @@ module.exports.profile = async (req, res) => {
   }
 };
 
-// update user profile 
-module.exports.update = async function(req, res) {
-  try {
-    if(req.user.id === req.params.id) {
-      await User.findByIdAndUpdate(req.params.id , req.body);
-      return res.redirect("back")
-    }else {
-      return res.status(401).send("unauthorized");
+// update user profile-image and name and email
+module.exports.update = async (req, res) => {
+  if (req.user.id == req.params.id) {
+    try {
+      let user = await User.findById(req.params.id, req.body);
+      User.upload(req, res, async function (err) {
+        if (err) {
+          console.log("multer Error", err);
+          req.flash("error", "Error uploading file");
+          return res.redirect("back");
+        }
+
+        console.log(req.body);
+        console.log(req.file);
+        if (req.file) {
+          // unlink or delete user profile
+          if (user.avatar) {
+            fs.unlinkSync(path.join(__dirname, "..", "user.avatar"));
+          }
+          // this saving the path uploading file
+          user.avatar = User.avatar_path + "/" + req.file.filename;
+        }
+
+        await user.save();
+        req.flash("success", "Profile updated successfully");
+        return res.redirect("back");
+      });
+    } catch (err) {
+      console.error(err);
+      req.flash("error", "An error occurred");
+      return res.redirect("back");
     }
-  } catch (error) {
-    return res.status(500).send({error:error});
+  } else {
+    req.flash("error", "Unauthorized");
+    return res.status(401).send("Unauthorized");
   }
-}
+};
 
 // render the sign up page
 module.exports.signUp = (req, res) => {
@@ -149,13 +175,13 @@ module.exports.create = async (req, res) => {
       return res.redirect("back");
     }
   } catch (err) {
-    console.log(err);
+    req.flash("error", err);
   }
 };
 
 /// sign in and create a session for the user
 module.exports.createSession = async (req, res) => {
-  req.flash('success','logged in successfully')
+  req.flash("success", "logged in successfully");
   return res.redirect("/");
 };
 
@@ -165,7 +191,7 @@ module.exports.destroySession = async (req, res) => {
     if (err) {
       return next(err);
     }
-  req.flash('success','you have logged out successfully')
+    req.flash("success", "you have logged out successfully");
     return res.redirect("/");
   });
 };

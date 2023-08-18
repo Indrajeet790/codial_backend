@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const uploads=path.join(__dirname,'uploads')
 const port = 8000;
 const cookieParser = require("cookie-parser");
 const expressLayouts = require("express-ejs-layouts");
@@ -29,8 +30,9 @@ app.set("layout extractScripts", true);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(__dirname + "/assets"));
+// make uploads 
+app.use("/uploads",express.static(__dirname + "/uploads"))
 // mongo store is used to store the session cookie in the db
-
 //session configuration
 const mongoStore = new MongoStore({
   db: "session",
