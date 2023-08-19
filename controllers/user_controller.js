@@ -116,9 +116,9 @@ module.exports.update = async (req, res) => {
         console.log(req.file);
         if (req.file) {
           // unlink or delete user profile
-          if (user.avatar) {
-            fs.unlinkSync(path.join(__dirname, "..", "user.avatar"));
-          }
+          // if (user.avatar) {
+          //   fs.unlinkSync(path.join(__dirname, "..", "user.avatar"));
+          // }
           // this saving the path uploading file
           user.avatar = User.avatar_path + "/" + req.file.filename;
         }
