@@ -104,21 +104,35 @@ module.exports.profile = async (req, res) => {
 module.exports.update = async (req, res) => {
   if (req.user.id == req.params.id) {
     try {
-      let user = await User.findById(req.params.id, req.body);
+      let user = await User.findById(req.params.id);
       User.upload(req, res, async function (err) {
         if (err) {
           console.log("multer Error", err);
           req.flash("error", "Error uploading file");
           return res.redirect("back");
         }
+        user.name = req.body.name;
+        user.email = req.body.email;
 
-        console.log(req.body);
         console.log(req.file);
+       
+
         if (req.file) {
           // unlink or delete user profile
-          // if (user.avatar) {
-          //   fs.unlinkSync(path.join(__dirname, "..", "user.avatar"));
-          // }
+          if (user.avatar) {
+            const avatarFilePath = path.join(__dirname, '..', user.avatar);
+            if (fs.existsSync(avatarFilePath)) {
+              try {
+                fs.unlinkSync(avatarFilePath);
+                console.log("Previous avatar deleted:", avatarFilePath);
+              } catch (unlinkErr) {
+                console.error("Error deleting previous avatar:", unlinkErr);
+              }
+            } else {
+              console.log("Previous avatar does not exist:", avatarFilePath);
+            }
+          }
+
           // this saving the path uploading file
           user.avatar = User.avatar_path + "/" + req.file.filename;
         }
