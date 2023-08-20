@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+// setting the path for image
 const uploads=path.join(__dirname,'uploads')
 const port = 8000;
 const cookieParser = require("cookie-parser");
@@ -8,11 +9,13 @@ const expressLayouts = require("express-ejs-layouts");
 const db = require("./config/mongoose");
 // use session cookies
 const session = require("express-session");
+const passportJwt=require("./config/passport-jwt-strategy")
 const passport = require("passport");
 const passportLocal = require("./config/passport_local_strategy");
 const MongoStore = require("connect-mongo")(session);
 const flash=require("connect-flash")
 const customMiddleware=require("./config/middleware")
+const jsonwebtoken=require("jsonwebtoken")
 
 //
 app.use(express.urlencoded());
