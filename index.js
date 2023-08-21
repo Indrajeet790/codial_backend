@@ -10,12 +10,14 @@ const db = require("./config/mongoose");
 // use session cookies
 const session = require("express-session");
 const passportJwt=require("./config/passport-jwt-strategy")
+const GoogleStrategy =require("./config/passport-google-oauth2")
 const passport = require("passport");
 const passportLocal = require("./config/passport_local_strategy");
 const MongoStore = require("connect-mongo")(session);
 const flash=require("connect-flash")
 const customMiddleware=require("./config/middleware")
 const jsonwebtoken=require("jsonwebtoken")
+require("dotenv").config();
 
 //
 app.use(express.urlencoded());
