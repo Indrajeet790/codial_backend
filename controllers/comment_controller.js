@@ -1,5 +1,6 @@
 const Comment = require("../models/comment");
 const Post = require("../models/post");
+const commentsMailer = require("../mailers/comment_Mailer");
 
 // create comment  of a post
 
@@ -18,6 +19,12 @@ module.exports.create = async function (req, res) {
 
       post.comments.push(comment);
       await post.save();
+      const populatedComment = await Comment.findById(comment._id)
+  .populate('user', 'name email')
+  .exec();
+      commentsMailer.newComment(populatedComment);
+
+      req.flash("success", "Comment published!");
 
       res.redirect("/");
     } else {
@@ -34,7 +41,7 @@ module.exports.create = async function (req, res) {
 module.exports.destroy = async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
-    
+
     if (!comment) {
       return res.status(404).send("Comment not found");
     }
@@ -45,11 +52,15 @@ module.exports.destroy = async (req, res) => {
       await comment.deleteOne();
 
       // Update the post to remove the comment from the comments array
-      await Post.findByIdAndUpdate(postId, { $pull: { comments: req.params.id } });
+      await Post.findByIdAndUpdate(postId, {
+        $pull: { comments: req.params.id },
+      });
 
-      return res.redirect('back');
+      return res.redirect("back");
     } else {
-      return res.status(403).send("You're not authorized to delete this comment");
+      return res
+        .status(403)
+        .send("You're not authorized to delete this comment");
     }
   } catch (err) {
     console.error(err);
