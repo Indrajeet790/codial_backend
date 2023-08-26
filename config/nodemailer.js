@@ -4,13 +4,13 @@ const path = require("path");
 require("dotenv").config();
 const transporter = nodemailer.createTransport({
 //   service: "gmail",
-host: 'smtp.ethereal.email',
+host: 'smtp.sendgrid.net',
   port: 587,
 //   secure: false,
   auth: {
     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: process.env.USER,
-    pass: process.env.PASSWORD
+    user: process.env.API_USER ,
+    pass: process.env.API_PASS
   },
 });
 
